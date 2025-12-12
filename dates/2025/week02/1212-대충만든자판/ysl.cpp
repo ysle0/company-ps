@@ -1,22 +1,19 @@
-#include <map>
 #include <string>
-#include <utility>
+#include <unordered_map>
 #include <vector>
 
 using namespace std;
 
-map<char, pair<int, int>> keymaps;
-
 vector<int> solution(vector<string> keymap, vector<string> targets) {
+  unordered_map<char, int> keymaps;
   vector<int> answer(targets.size(), 0);
 
   for (int i = 0; i < keymap.size(); i++) {
     for (int j = 0; j < keymap[i].size(); j++) {
       if (keymaps.find(keymap[i][j]) == keymaps.end()) {
-        keymaps[keymap[i][j]] = make_pair(i, j + 1);
+        keymaps[keymap[i][j]] = j + 1;
       } else {
-        keymaps[keymap[i][j]] =
-            make_pair(i, min(keymaps[keymap[i][j]].second, j + 1));
+        keymaps[keymap[i][j]] = min(keymaps[keymap[i][j]], j + 1);
       }
     }
   }
@@ -28,7 +25,7 @@ vector<int> solution(vector<string> keymap, vector<string> targets) {
         break;
       }
 
-      answer[i] += keymaps[c].second;
+      answer[i] += keymaps[c];
     }
   }
 
